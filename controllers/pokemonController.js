@@ -63,6 +63,7 @@ router.put('/train/:id', (req, res) => {
                             activity: "training"
                         }, {where: {owner: req.user.id, id: req.params.id}})
                             .then(returned => res.status(200).send({message: `${returned} pokemon in training.`, pokemon: {
+                                id: response.id,
                                 name: response.name,
                                 pokemon: response.pokemon,
                                 type: response.type,
@@ -76,7 +77,8 @@ router.put('/train/:id', (req, res) => {
                         res.status(404).json({error: "Pokemon not found"});
                     }
                 })
-        })
+        },
+        () => res.send({message: "whoops"}))
         .catch(err => res.send({error: err}));
 })
 
@@ -87,6 +89,41 @@ router.delete('/delete/:id', (req, res) =>{
                 .then(returned => {
                     res.status(200).send({destroyed: returned, message: `${returned} pokemon destroyed.`, pokemon: response})
                 })
+        })
+})
+
+router.get('/fight', (req, res) => {
+    pokemonModel.findAll({
+        where: {activity: "readyToFight"}
+    })
+        .then(response => res.json({pokemon: response}))
+})
+
+router.put('/fight', (req, res) => {
+    pokemonModel.update({activity: "resting"}, {where: {owner: req.user.id, activity: "readyToFight"}}
+    )
+        .then(() => {
+            pokemonModel.findOne({where:{id: req.body.pokemon.id}})
+        
+            .then(pokemonData => {
+                pokemonModel.update({activity: "readyToFight"}, {where:{owner: req.user.id, id: req.body.pokemon.id}}
+                )
+                .then(response => {res.json({ numberUpdated: response, pokemon: pokemonData})})
+            })
+        })
+})
+
+router.put('/restall', (req, res) => {
+    pokemonModel.update({activity: "resting"}, {where:{owner: req.user.id}})
+        .then(response => res.json({response: response}))
+})
+
+router.put('/fight/:id', (req, res) => {
+    pokemonModel.update({activity: "resting"}, {where: {owner: req.user.id, activity: "readyToFight"}}
+    )
+        .then(() => {
+            pokemonModel.update({activity: `fought:${req.body.pokemon.id}`}, {where: {id: req.params.id, activity: "readyToFight"}})
+                .then(response => res.json({response: response}))
         })
 })
 
