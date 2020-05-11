@@ -94,12 +94,12 @@ router.delete('/delete/:id', (req, res) =>{
 
 router.get('/fight', (req, res) => {
     pokemonModel.findAll({
-        where: {activity: "readyToFight"}
+        where: {activity: "readyToFight", owner: {ne: req.user.id}}
     })
         .then(response => res.json({pokemon: response}))
 })
 
-router.put('/fight', (req, res) => {
+router.put('/hostfight', (req, res) => {
     pokemonModel.update({activity: "resting"}, {where: {owner: req.user.id, activity: "readyToFight"}}
     )
         .then(() => {
@@ -118,12 +118,61 @@ router.put('/restall', (req, res) => {
         .then(response => res.json({response: response}))
 })
 
-router.put('/fight/:id', (req, res) => {
+router.get('/:id', (req, res) => {
+    pokemonModel.findOne({
+        where: {
+            id: req.params.id,
+        }
+    })
+        .then(response => res.json({pokemon: response}))
+})
+
+router.put('/joinfight/:id', (req, res) => {
     pokemonModel.update({activity: "resting"}, {where: {owner: req.user.id, activity: "readyToFight"}}
     )
         .then(() => {
             pokemonModel.update({activity: `fought:${req.body.pokemon.id}`}, {where: {id: req.params.id, activity: "readyToFight"}})
-                .then(response => res.json({response: response}))
+                .then(response => {
+                    if (response > 0) {
+                        pokemonModel.findOne({where: {id: req.body.pokemon.id}})
+                        .then(pokemonOne => {
+                            pokemonModel.findOne({where: {id: req.params.id}})
+                                .then(pokemonTwo => {
+                                    let winner = Math.random();
+                                    let oldL1 = pokemonOne.level;
+                                    let oldL2 = pokemonTwo.level;
+                                    if (winner > pokemonTwo.level / (pokemonTwo.level + pokemonOne.level)) {
+                                        pokemonOne.level += (pokemonTwo.level/4);
+                                        pokemonTwo.level = (0.75 * pokemonTwo.level);
+                                    } else {
+                                        pokemonTwo.level += (pokemonOne.level/4);
+                                        pokemonOne.level = (0.75 * pokemonOne.level);
+                                    }
+                                    pokemonTwo.level = Math.round(pokemonTwo.level);
+                                    pokemonOne.level = Math.round(pokemonOne.level);
+                                    pokemonModel.update({level: pokemonOne.level}, {where: {id: pokemonOne.id}})
+                                        .then(() => {
+                                            pokemonModel.update({level: pokemonTwo.level}, {where: {id: pokemonTwo.id}})
+                                            .then(
+                                                res.json({
+                                                    pokemon1: {
+                                                        oldLevel: oldL1,
+                                                        pokemon: pokemonOne
+                                                    },
+                                                    pokemon2: {
+                                                        oldLevel: oldL2,
+                                                        pokemon: pokemonTwo
+                                                    }
+                                                })
+                                            )
+                                        })
+                                })
+                        })
+                    } else {
+                        res.send({message: "Pokemon is not ready to fight.", code:"notReady"})
+                    }
+                    
+                })
         })
 })
 
