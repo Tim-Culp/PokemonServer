@@ -69,26 +69,5 @@ router.post('/login', (req, res) => {
     })
 })
 
-router.put('/update', (req, res) => {
-    if (req.body.adminpass == process.env.ADMINPASS) {
-        userModel.findOne({
-            where: {username: req.body.user.username}
-        })
-            .then(userData => {
-                userModel.update({
-                    username: userData.username,
-                    passwordhash: bcrypt.hashSync(req.body.user.password, 11)
-                },
-                {where: {username: req.body.user.username}})
-            })
-            .then(user => {
-                console.log(user)
-                res.json({status: "clear", user: {username: req.body.user.username, password: req.body.user.password}})
-            })
-    } else {
-        res.status(401).json({error: "admin password incorrect or unprovided"})
-    }
-})
-
 
 module.exports = router;

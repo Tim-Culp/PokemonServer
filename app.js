@@ -1,13 +1,12 @@
 const express = require('express'); //1
 const app = express();
 
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
+const sequelize = require('./db');
 //modules that require .db need the obscured environment postgres password varialbe
 const userController = require('./controllers/userController');
 const pokemonController = require('./controllers/pokemonController');
-const sequelize = require('./db');
 
 sequelize.sync();
 
