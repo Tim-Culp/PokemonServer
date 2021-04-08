@@ -37,10 +37,13 @@ router.post('/create', (req, res) => {
             } else {
                 console.log("USER FOUND BY THAT NAME")
                 res.json({error: "Username already taken.", code:"usernameTaken"})
-            }
+        }
     
     
     
+    }, err => {
+        console.log("FINDONE DIDNT WORK")
+        console.error(err)
     })
     
 })
