@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sequelize = require('../db');
+//this is where our controller accesses our model. We need this to be able to handle all the requests to our server. Pretty sure sequelize uses the model to manipulate the columns in our postgres database.
 const pokemonModel = sequelize.import('../models/pokemonModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');

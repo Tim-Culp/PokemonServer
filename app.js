@@ -17,6 +17,8 @@ app.use(require('./middleware/headers'));
 app.use('/api/users', userController);
 
 //authentication gate
+
+//validate-session is used to identify which user, if any, is accessing the server and therefore giving users' data necessary privacy. It does this by taking the request's authentication header and appending a "user" object to the request before send it onward. In app.js, any route below this validate-session route will have to pass through validate-session before being allowed to access the below routes.
 app.use(require('./middleware/validate-session'));
 //protected routes
 app.use('/api/pokemon', pokemonController);

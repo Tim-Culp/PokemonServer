@@ -15,6 +15,7 @@ router.post('/create', (req, res) => {
                     passwordhash: bcrypt.hashSync(req.body.user.password, 11)
                 }).then(userData => {
                     //give user session token corresponding to this app's jwt secret
+                    //token is created by jwt, a node module which handles the encryption and decryption of web tokens. This token is used by validate-session to determine which user is accessing the server. Validate-session uses jwt to break down the session token into its payload using the jwt secret as the salt, which is then readable.
                     let token = jwt.sign({id: userData.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})
                     res.json({
                         user: userData,
