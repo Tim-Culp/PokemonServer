@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs');
 router.post('/create', (req, res) => {
     console.log("CREATE BRANCH STARTED");
     console.log(`REQUEST: ${JSON.stringify(req.body)}`)
+    console.log("CREATE CREATE")
     userModel.create({
         username: "TEST1",
         passwordhash: "efhwefaiowefuhawepighaeprgohaeporgiaogh"
