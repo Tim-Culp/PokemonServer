@@ -10,52 +10,42 @@ const bcrypt = require('bcryptjs');
 router.post('/create', (req, res) => {
     console.log("CREATE BRANCH STARTED");
     console.log(`REQUEST: ${JSON.stringify(req.body)}`)
-    console.log("CREATE CREATE")
-    userModel.create({
-        username: "TEST1",
-        passwordhash: "efhwefaiowefuhawepighaeprgohaeporgiaogh"
-    }).then(returned => {
-        console.log("SUCCESS, RETURNED DATA: " + returned);
-    }).catch(err => console.error("TASK FAILED SUCCESSFULLY:", err));
-    // userModel.findOne({where:{username:req.body.user.username}})
-    //     .then(response => {
-    //         console.log("FINDONE COMPLETED")
-    //         if (!response) {
-    //             console.log("DID NOT FIND USER BY THAT NAME... CREATING USER...")
-    //             userModel.create({
-    //                 username: req.body.user.username,
-    //                 //register password with bsync encryption
-    //                 passwordhash: bcrypt.hashSync(req.body.user.password, 11)
-    //             }).then(userData => {
-    //                 console.log("USER CREATION SUCCESSFUL")
-    //                 //give user session token corresponding to this app's jwt secret
-    //                 //token is created by jwt, a node module which handles the encryption and decryption of web tokens. This token is used by validate-session to determine which user is accessing the server. Validate-session uses jwt to break down the session token into its payload using the jwt secret as the salt, which is then readable.
-    //                 let token = jwt.sign({id: userData.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})
-    //                 res.json({
-    //                     user: userData,
-    //                     message: "created",
-    //                     sessiontoken: token
-    //                 });
-    //             },
-    //             err => {
-    //                 console.log("USER CREATION UNSUCCESSFUL")
-    //                 res.send(err);
-    //             })
+    userModel.findOne({where:{username:req.body.user.username}})
+        .then(response => {
+            console.log("FINDONE COMPLETED")
+            if (!response) {
+                console.log("DID NOT FIND USER BY THAT NAME... CREATING USER...")
+                userModel.create({
+                    username: req.body.user.username,
+                    //register password with bsync encryption
+                    passwordhash: bcrypt.hashSync(req.body.user.password, 11)
+                }).then(userData => {
+                    console.log("USER CREATION SUCCESSFUL")
+                    //give user session token corresponding to this app's jwt secret
+                    //token is created by jwt, a node module which handles the encryption and decryption of web tokens. This token is used by validate-session to determine which user is accessing the server. Validate-session uses jwt to break down the session token into its payload using the jwt secret as the salt, which is then readable.
+                    let token = jwt.sign({id: userData.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})
+                    res.json({
+                        user: userData,
+                        message: "created",
+                        sessiontoken: token
+                    });
+                },
+                err => {
+                    console.log("USER CREATION UNSUCCESSFUL")
+                    res.send(err);
+                })
 
-    //         } else {
-    //             console.log("USER FOUND BY THAT NAME")
-    //             res.json({error: "Username already taken.", code:"usernameTaken"})
-    //         }
+            } else {
+                console.log("USER FOUND BY THAT NAME")
+                res.json({error: "Username already taken.", code:"usernameTaken"})
+            }
         
         
         
-    //     }, err => {
-    //         console.log("FINDONE DIDNT WORK")
-    //         console.error(err)
-    //     }).catch(err => {
-    //         console.log("CAUGHT IT BABYYYYYY")
-    //         console.log(err);
-    //     })
+        }).catch(err => {
+            console.log("CAUGHT IT BABYYYYYY")
+            console.log(err);
+        })
     
 })
 
