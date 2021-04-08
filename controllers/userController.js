@@ -43,6 +43,7 @@ router.post('/create', (req, res) => {
         
         
         }).catch(err => {
+            res.send(err);
             console.log("CAUGHT IT BABYYYYYY")
             console.log(err);
         })
