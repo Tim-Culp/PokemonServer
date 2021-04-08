@@ -8,7 +8,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 router.post('/create', (req, res) => {
-    console.log("CREATE BRANCH STARTED")
+    console.log("CREATE BRANCH STARTED");
+    console.log(`REQUEST: ${req.body.user.username, req.body.user.password}`)
     userModel.findOne({where:{username:req.body.user.username}})
         .then(response => {
             console.log("FINDONE COMPLETED")
@@ -37,14 +38,14 @@ router.post('/create', (req, res) => {
             } else {
                 console.log("USER FOUND BY THAT NAME")
                 res.json({error: "Username already taken.", code:"usernameTaken"})
-        }
-    
-    
-    
-    }, err => {
-        console.log("FINDONE DIDNT WORK")
-        console.error(err)
-    })
+            }
+        
+        
+        
+        }, err => {
+            console.log("FINDONE DIDNT WORK")
+            console.error(err)
+        })
     
 })
 
