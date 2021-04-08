@@ -45,7 +45,7 @@ router.post('/create', (req, res) => {
         }, err => {
             console.log("FINDONE DIDNT WORK")
             console.error(err)
-        }).catch(err => {
+        }).then(()=>{console.log("is this even working")}).catch(err => {
             console.log("CAUGHT IT BABYYYYYY")
             console.error(err);
         })
