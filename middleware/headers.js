@@ -3,8 +3,11 @@ module.exports = (req, res, next) =>    {
     res.header('access-control-allow-origin', '*');
     res.header('access-control-allow-methods', 'GET, POST, PUT, DELETE');
     res.header('access-control-allow-headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    console.log("REQUEST AUTOPSY ------------------------------------------------------")
+    console.log(req);
+    console.log("END REQUEST AUTOPSY ------------------------------------------------------")
     if(req.method == "OPTIONS"){
         next();
+        console.log("NEXTED FROM HEADERS");
     }
-    console.log("NEXTED FROM HEADERS")
 }
