@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 
 router.post('/create', (req, res) => {
     console.log("CREATE BRANCH STARTED");
-    console.log(`REQUEST: ${JSON.stringify(req.body)}`)
+    console.log(`REQUEST: ${JSON.stringify(req.body)}`);
     userModel.findOne({where:{username:req.body.user.username}})
         .then(response => {
             console.log("FINDONE COMPLETED")
@@ -43,7 +43,7 @@ router.post('/create', (req, res) => {
         
         
         }).catch(err => {
-            res.send(err);
+            res.json({message:"YOU DONE MESSED UP A A RON"});
             console.log("CAUGHT IT BABYYYYYY")
             console.log(err);
         })
