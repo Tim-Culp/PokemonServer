@@ -1,6 +1,8 @@
 let jwt = require('jsonwebtoken');
 let sequelize = require('../db');
-let User = sequelize.import('../models/userModel');
+let Sequelize = require('sequelize');
+// let User = sequelize.import('../models/userModel');
+let User = require('../models/userModel')(sequelize, Sequelize.DataTypes);
 
 module.exports = (req, res, next) => {
     //if preflight options check, just let it through without headers
