@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const sequelize = require('../db');
+// const sequelize = require('../db');
 // const userModel = sequelize.import('../models/userModel');
-const Sequelize = require('sequelize');
-const userModel = require('../models/userModel')(sequelize, Sequelize.DataTypes);
+// const Sequelize = require('sequelize');
+const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
