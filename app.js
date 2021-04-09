@@ -8,7 +8,7 @@ const sequelize = require('./db');
 const userController = require('./controllers/userController');
 const pokemonController = require('./controllers/pokemonController');
 
-sequelize.sync({force:true});
+sequelize.sync();
 
 app.use(express.json());
 app.use(require('./middleware/headers'));
