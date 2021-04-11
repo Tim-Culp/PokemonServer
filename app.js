@@ -23,6 +23,7 @@ app.use(require('./middleware/validate-session'));
 //protected routes
 app.use('/api/pokemon', pokemonController);
 
+console.log("Trying to authenticate...")
 sequelize.authenticate()
     .then(()=> {
         console.log("Connected to postgres database")
