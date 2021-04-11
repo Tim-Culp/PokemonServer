@@ -11,10 +11,10 @@ const sequelize = new Sequelize(process.env.DATABASE_URL+ "?sslmode=require", {
 // })
 
 
-sequelize.authenticate().then(() => {
-    console.log("Connected to postgres database")
-}, err => {
-    console.error(err);
-})
+// sequelize.authenticate().then(() => {
+//     console.log("Connected to postgres database")
+// }, err => {
+//     console.error(err);
+// })
 
 module.exports = sequelize;

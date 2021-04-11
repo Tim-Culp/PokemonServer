@@ -8,7 +8,7 @@ const sequelize = require('./db');
 const userController = require('./controllers/userController');
 const pokemonController = require('./controllers/pokemonController');
 
-sequelize.sync();
+// sequelize.sync();
 
 app.use(express.json());
 app.use(require('./middleware/headers'));
@@ -23,7 +23,14 @@ app.use(require('./middleware/validate-session'));
 //protected routes
 app.use('/api/pokemon', pokemonController);
 
+sequelize.authenticate()
+    .then(()=>sequelize.sync())
+    .then(()=> {
+        app.listen(process.env.PORT, () => {
+            console.log("Server listening on port " + process.env.PORT)
+        });
 
-app.listen(process.env.PORT, () => {
-    console.log("Server listening on port " + process.env.PORT)
-});
+    }).catch((e)=>{
+        console.log("Error: Server crashed.");
+        console.log(e);
+    })
