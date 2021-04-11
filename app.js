@@ -24,13 +24,15 @@ app.use(require('./middleware/validate-session'));
 app.use('/api/pokemon', pokemonController);
 
 sequelize.authenticate()
-    .then(()=>sequelize.sync())
     .then(()=> {
-        app.listen(process.env.PORT, () => {
-            console.log("Server listening on port " + process.env.PORT)
-        });
-
-    }).catch((e)=>{
+        console.log("Connected to postgres database")
+        sequelize.sync()
+            .then(()=>{
+                app.listen(process.env.PORT, () => {
+                console.log("Server listening on port " + process.env.PORT)
+                })
+            })
+    }).catch(e=>{
         console.log("Error: Server crashed.");
         console.log(e);
     })
