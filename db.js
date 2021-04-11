@@ -2,7 +2,10 @@ const Sequelize = require("sequelize");
 
 
 const sequelize = new Sequelize(process.env.DATABASE_URL+ "?sslmode=require", {
-    dialect: "postgres"
+    dialect: "postgres",
+    dialectOptions: {
+        ssl: true
+    }
 })
 
 // const sequelize = new Sequelize('pokemon', process.env.PG_USER, process.env.PG_PASS, {
